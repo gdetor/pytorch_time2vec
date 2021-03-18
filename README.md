@@ -25,7 +25,7 @@ of Venice based on historical data (2009).
 
 To run the simple LSTM model type in:
 ```
-$ python (or python3 depending on your system#&39s configuration) main.py lstm 
+$ python (or python3 depending on your system`s configuration) main.py lstm 
 ```
 
 And to run the T2V-LSTM:
