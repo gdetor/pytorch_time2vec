@@ -25,12 +25,12 @@ of Venice based on historical data (2009).
 
 To run the simple LSTM model type in:
 ```
-$ python (or python3 depending on your system`s configuration) main.py lstm 
+$ python (or python3 depending on your system`s configuration) main.py --model lstm 
 ```
 
 And to run the T2V-LSTM:
 ```
-$ python main.py tv-lstm
+$ python main.py --model tv-lstm
 ```
 
 When you run either of the two aforementioned examples the script will store 
@@ -43,6 +43,10 @@ the results of the test predictions for both LSTM and T2V-LSTM models).
 ```
 $ python analysis.py
 ```
+You can control more parameters such as the number of epochs or batches and
+the length of the learned sequence by passing command line arguments to the
+**main.py** script. 
+
 
 ## Requirements
  - Python 3
