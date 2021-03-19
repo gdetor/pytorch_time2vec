@@ -23,7 +23,7 @@ from torch.optim import Adam
 from torch.utils.data import DataLoader
 
 from data_loader.timeseries_class import timeseries
-from model.network import T2VLSTM, LSTM
+from model.lstm import T2VLSTM, LSTM
 from model.mlp import MLP, T2VMLP
 
 import matplotlib.pylab as plt
