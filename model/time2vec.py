@@ -25,9 +25,14 @@ class Time2Vec(nn.Linear):
              Kazemi et al., 2019.
     """
     def __init__(self, in_features, out_features, bias=True, func=sin,
-                 dev="cuda:0"):
+                 dev="cuda:0", const=None, init_vals=[-0.05, 0.05]):
         """
             Constructor of time2vec_layer.
+
+            Note: Currently the parameters are initialized either as constants
+            or randomly drawn from uniform distribution. If the end-user needs
+            a different initialization distribution they can replace the
+            distributions at lines: 63, 70, 81, 89.
 
             Args:
                 in_features (int):  Number of input features
@@ -36,6 +41,11 @@ class Time2Vec(nn.Linear):
                                     term.
                 func (object):      Torch periodic function (sin, cos, etc)
                 dev (str):          Computational Device (GPU or CPU)
+                const (float):      If a number is provided the parameters are
+                                    initialized with constants values given by
+                                    the provided number.
+                init_vals (list):   A list contains the intervals for the
+                                    uniform initialization of the parameters.
 
             Returns:
 
@@ -46,11 +56,18 @@ class Time2Vec(nn.Linear):
 
         # Define and register the essential Time2Vec parameters
         # w0 and b0 correspond to omega_0 and phi_0 in [1]
-        # self.W0 = nn.Parameter(rand(1, 1).cuda())
         self.W0 = nn.Parameter(rand(1, 1).to(self.dev))
+        if const is not None:
+            nn.init.constant_(self.W0, const)
+        else:
+            nn.init.uniform_(self.W0, a=init_vals[0], b=init_vals[1])
         self.register_parameter("W0", self.W0)
+
         self.b0 = nn.Parameter(rand(in_features, 1).to(self.dev))
-        # self.b0 = nn.Parameter(rand(in_features, 1).cuda())
+        if const is not None:
+            nn.init.constant_(self.b0, const)
+        else:
+            nn.init.uniform_(self.b0, a=init_vals[0], b=init_vals[1])
         self.register_parameter("b0", self.b0)
 
         # W and b correspond to omega_i and phi_i for i != 0
@@ -58,13 +75,18 @@ class Time2Vec(nn.Linear):
         # func=sin.
         self.W = nn.Parameter(rand(out_features,
                                    out_features).to(self.dev))
-        # self.W = nn.Parameter(rand(out_features,
-        #                            out_features).cuda())
+        if const is not None:
+            nn.init.constant_(self.W, const)
+        else:
+            nn.init.uniform_(self.W, a=init_vals[0], b=init_vals[1])
         self.register_parameter("W", self.W)
+
         self.b = nn.Parameter(rand(in_features,
                                    out_features).to(self.dev))
-        # self.b = nn.Parameter(rand(in_features,
-        #                            out_features).cuda())
+        if const is not None:
+            nn.init.constant_(self.b, const)
+        else:
+            nn.init.uniform_(self.b, a=init_vals[0], b=init_vals[1])
         self.register_parameter("b", self.b)
 
         # Nonlinear period function
